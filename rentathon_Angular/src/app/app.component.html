@@ -1,0 +1,40 @@
+<div *ngIf="!isAdmin"><card-comp *ngIf="specs" [specs]="specs" [objType]="objType" (cardEmitter)="cardEvent($event)" ></card-comp>
+<div class="card">
+    <div class="card-title">
+        <button class="btn btn-round btn-secandory" (click)="isAdmin = true"> I am Admin</button>
+    </div>
+
+<div class="form row horizontalScroll" *ngFor="let objSchema of schema">
+    <div style="display: flex;padding: 1em;background-color:antiquewhite">
+        <h2>{{objSchema['name'] }}</h2>
+        <i [ngClass]="objSchema['icon']" class="pull-left fa-2x" aria-hidden="true"></i>
+    </div>
+        
+    <div class="col-md-2" *ngFor = "let item of values[objSchema['name']]">
+        <div class="card" style="border-radius: 100px!important;background-color:ivory; margin-top:56px">
+            <div class="card-body" style="height: 100%; margin:2em;padding:2em;" >
+                <label style="width: 100%;display:block" *ngFor="let key of objSchema['specification']['fields']">
+                   {{key['key']}} : {{item[key['key']]}}</label>
+            </div>
+        </div>
+    </div>
+    <mat-card>
+    <div class="col-md-2" style ="margin: 2em;width:6%;height:100px;margin-top:105px ">
+                <button (click)="setValuesTo(objSchema)" class="fa fa-plus fa-4x btn-round" style="border-radius: 37px;background: azure;"></button>
+    </div> 
+</mat-card>
+</div>
+</div>
+</div>
+<div *ngIf="isAdmin">
+    <button class="btn btn-round btn-primary" (click)="navToNormal()" > Let's get back</button>
+    <div class="card">
+        <h3>Enter the Object Json Schema Below</h3>
+        <textarea rows="30  " cols="100" [formControl]="schemaControl" (change)="checkJsonValue()"></textarea>
+        <button class="btn btn-round btn-primary" (click)="saveSchema()" [disabled]="!validJson">Save Schema</button>
+        <div *ngIf="exception">
+            {{exception | json}}
+        </div>
+    </div>
+</div>
+
